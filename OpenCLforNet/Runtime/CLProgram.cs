@@ -16,7 +16,7 @@ namespace OpenCLforNet.Runtime
         public Context Context { get; }
         public void* Pointer { get; }
 
-        public CLProgram(string source, Context context)
+        public CLProgram(string source, Context context, string option = null)
         {
             Context = context;
 
@@ -39,8 +39,17 @@ namespace OpenCLforNet.Runtime
                 var devicePointers = (void**)Marshal.AllocCoTaskMem((devices.Length * IntPtr.Size));
                 for (var i = 0; i < devices.Length; i++)
                     devicePointers[i] = devices[i].Pointer;
-                OpenCL.clBuildProgram(Pointer, (uint)devices.Length, devicePointers, null, null, null).CheckError();
-
+                if (String.IsNullOrEmpty(option))
+                {
+                    OpenCL.clBuildProgram(Pointer, (uint)devices.Length, devicePointers, null, null, null).CheckError();
+                }
+                else
+                {
+                    fixed (byte* optionPointer = Encoding.UTF8.GetBytes(option))
+                    {
+                        OpenCL.clBuildProgram(Pointer, (uint)devices.Length, devicePointers, optionPointer, null, null).CheckError();
+                    }
+                }
             }
             catch (Exception e)
             {

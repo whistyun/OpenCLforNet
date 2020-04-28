@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenCLforNet.Function;
+using OpenCLforNet.Memory;
 using OpenCLforNet.PlatformLayer;
 using OpenCLforNet.Runtime;
 
@@ -55,7 +56,6 @@ namespace OpenCLforNetTest
                     Console.WriteLine($"result         : [{String.Join("  ", result)}]");
                 }
 
-
                 Console.WriteLine("\nCL_MEM_ALLOC_HOST_PTR");
                 using (var mappingMemory = context.CreateMappingMemory(sizeof(float) * 4))
                 {
@@ -81,7 +81,6 @@ namespace OpenCLforNetTest
                     Console.WriteLine($"result         : [{String.Join("  ", data)}]");
                 }
 
-
                 Console.WriteLine("\nCL_MEM_USE_HOST_PTR");
                 using (var mappingMemory = context.CreateMappingMemory(
                         new float[] { 3F, 4.5F, 0F, -4.4F },
@@ -100,21 +99,20 @@ namespace OpenCLforNetTest
                 }
 
                 Console.WriteLine("\nSVM");
-                using (var svmBuffer = context.CreateSVMBuffer(sizeof(float) * 4, 0))
+                using (var svmBuffer = context.CreateFloatSVMBuffer(4))
                 {
                     kernel.SetArgs(svmBuffer, 5F);
 
-                    var pointer = (float*)svmBuffer.GetSVMPointer();
-                    pointer[0] = 3F;
-                    pointer[1] = 4.5F;
-                    pointer[2] = 0F;
-                    pointer[3] = -4.4F;
+                    svmBuffer[0] = 3F;
+                    svmBuffer[1] = 4.5F;
+                    svmBuffer[2] = 0F;
+                    svmBuffer[3] = -4.4F;
                     var event51 = kernel.NDRange(commandQueue);
 
                     Console.WriteLine($"exec time      : {event51.ExecutionTime} ns");
                     Console.Write("result         : [  ");
                     for (var i = 0; i < 4; i++)
-                        Console.Write($"{pointer[i]}  ");
+                        Console.Write($"{svmBuffer[i]}  ");
                     Console.WriteLine("]");
                 }
             }
@@ -153,14 +151,6 @@ namespace OpenCLforNetTest
                     }
                 }
             }
-        }
-
-        private static void ShowArray(float[] array)
-        {
-            Console.Write("result : [  ");
-            foreach (var value in array)
-                Console.Write($"{value}  ");
-            Console.WriteLine("]");
         }
 
         private static string source = @"

@@ -11,7 +11,6 @@ namespace OpenCLforNet.Memory
 {
     public unsafe class MappingMemory : AbstractMemory
     {
-
         public MappingMemory(Context context, long size)
         {
             CreateMappingMemory(context, size);
@@ -102,6 +101,5 @@ namespace OpenCLforNet.Memory
             OpenCL.clEnqueueUnmapMemObject(commandQueue.Pointer, Pointer, pointer, 0, null, &event_).CheckError();
             return new Event(event_);
         }
-
     }
 }

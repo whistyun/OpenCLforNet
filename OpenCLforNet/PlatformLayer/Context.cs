@@ -64,6 +64,17 @@ namespace OpenCLforNet.PlatformLayer
             return new CLProgram(source, this);
         }
 
+        public CLProgram CreateProgram(string source, string option)
+        {
+            return new CLProgram(source, this, option);
+        }
+
+        public Kernel CreateKernel(string source, string kernelName)
+        {
+            var program = new CLProgram(source, this);
+            return program.CreateKernel(kernelName);
+        }
+
         public SimpleMemory CreateSimpleMemory(long size)
         {
             return new SimpleMemory(this, size);
@@ -147,6 +158,42 @@ namespace OpenCLforNet.PlatformLayer
         public SVMBuffer CreateSVMBuffer(long size, uint alignment)
         {
             return new SVMBuffer(this, size, alignment);
+
+        }
+
+        public ByteSVMBuffer CreateByteSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
+        {
+            return new ByteSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
+        }
+
+        public CharSVMBuffer CreateCharSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
+        {
+            return new CharSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
+        }
+
+        public ShortSVMBuffer CreateShortSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
+        {
+            return new ShortSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
+        }
+
+        public IntSVMBuffer CreateIntSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
+        {
+            return new IntSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
+        }
+
+        public LongSVMBuffer CreateLongSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
+        {
+            return new LongSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
+        }
+
+        public FloatSVMBuffer CreateFloatSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
+        {
+            return new FloatSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
+        }
+
+        public DoubleSVMBuffer CreateDoubleSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
+        {
+            return new DoubleSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
         }
 
         protected void DisposeUnManaged()

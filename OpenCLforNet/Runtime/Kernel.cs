@@ -50,76 +50,100 @@ namespace OpenCLforNet.Runtime
                 isDisposed = true;
             }
         }
-        private void*[] Args = new void*[0];
+        private readonly Dictionary<int, IntPtr> Args = new Dictionary<int, IntPtr>();
+
+        public void SetArg(int index, object arg)
+        {
+            if (arg == null)
+            {
+                throw new NullReferenceException("Arg must not be null.");
+            }
+            else if (arg is AbstractMemory mem)
+            {
+                // Remove old memobject
+                if (Args.ContainsKey(index))
+                {
+                    Marshal.FreeCoTaskMem(Args[index]);
+                    Args.Remove(index);
+                }
+
+                // Add new memobject
+                var argPointer = Marshal.AllocCoTaskMem(IntPtr.Size);
+                Marshal.WriteIntPtr(argPointer, new IntPtr(mem.Pointer));
+                OpenCL.clSetKernelArg(Pointer, index, IntPtr.Size, (void*)argPointer).CheckError();
+                Args.Add(index, argPointer);
+            }
+            else if (arg is SVMBuffer buf)
+            {
+                OpenCL.clSetKernelArgSVMPointer(Pointer, index, buf.Pointer).CheckError();
+            }
+            else if (arg is byte barg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(byte), &barg).CheckError();
+            }
+            else if (arg is sbyte sbarg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(sbyte), &sbarg).CheckError();
+            }
+            else if (arg is char carg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(char), &carg).CheckError();
+            }
+            else if (arg is short sarg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(short), &sarg).CheckError();
+            }
+            else if (arg is ushort usarg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(ushort), &usarg).CheckError();
+            }
+            else if (arg is int iarg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(int), &iarg).CheckError();
+            }
+            else if (arg is uint uiarg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(uint), &uiarg).CheckError();
+            }
+            else if (arg is long larg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(long), &larg).CheckError();
+            }
+            else if (arg is ulong ularg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(ulong), &ularg).CheckError();
+            }
+            else if (arg is float farg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(float), &farg).CheckError();
+            }
+            else if (arg is double darg)
+            {
+                OpenCL.clSetKernelArg(Pointer, index, sizeof(double), &darg).CheckError();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public void SetArgs(params object[] args)
         {
-            foreach (var arg in Args)
-            {
-                Marshal.FreeCoTaskMem(new IntPtr(arg));
-            }
-            Args = new void*[args.Length];
             for (var i = 0; i < args.Length; i++)
             {
-                if (args[i] == null)
-                {
-                    throw new NullReferenceException();
-                }
-                else if (args[i] is AbstractMemory mem)
-                {
-                    var argPointer = (void*)Marshal.AllocCoTaskMem(IntPtr.Size);
-                    Marshal.WriteIntPtr(new IntPtr(argPointer), new IntPtr(mem.Pointer));
-                    OpenCL.clSetKernelArg(Pointer, i, IntPtr.Size, argPointer).CheckError();
-                    Args[i] = argPointer;
-                }
-                else if (args[i] is SVMBuffer buf)
-                {
-                    OpenCL.clSetKernelArgSVMPointer(Pointer, i, buf.Pointer).CheckError();
-                }
-                else if (args[i] is byte barg)
-                {
-                    OpenCL.clSetKernelArg(Pointer, i, sizeof(byte), &barg).CheckError();
-                }
-                else if (args[i] is char carg)
-                {
-                    OpenCL.clSetKernelArg(Pointer, i, sizeof(char), &carg).CheckError();
-                }
-                else if (args[i] is short sarg)
-                {
-                    OpenCL.clSetKernelArg(Pointer, i, sizeof(short), &sarg).CheckError();
-                }
-                else if (args[i] is int iarg)
-                {
-                    OpenCL.clSetKernelArg(Pointer, i, sizeof(int), &iarg).CheckError();
-                }
-                else if (args[i] is long larg)
-                {
-                    OpenCL.clSetKernelArg(Pointer, i, sizeof(long), &larg).CheckError();
-                }
-                else if (args[i] is float farg)
-                {
-                    OpenCL.clSetKernelArg(Pointer, i, sizeof(float), &farg).CheckError();
-                }
-                else if (args[i] is double darg)
-                {
-                    OpenCL.clSetKernelArg(Pointer, i, sizeof(double), &darg).CheckError();
-                }
-                else
-                {
-                    throw new NotImplementedException();
-                }
+                SetArg(i, args[i]);
             }
         }
 
         private uint Dimention = 1;
-        private IntPtr* WorkSizes = (IntPtr*)Marshal.AllocCoTaskMem(3 * IntPtr.Size);
+        private readonly IntPtr* WorkSizes = (IntPtr*)Marshal.AllocCoTaskMem(3 * IntPtr.Size);
 
         public void SetWorkSize(params long[] workSizes)
         {
             if (workSizes.Length <= 0 || 4 <= workSizes.Length)
                 throw new ArgumentException("workSizes length is invalid.");
 
-            Dimention = (uint)workSizes.Rank;
+            Dimention = (uint)workSizes.Length;
             for (var i = 0; i < Dimention; i++)
                 WorkSizes[i] = new IntPtr(workSizes[i]);
         }
@@ -155,7 +179,7 @@ namespace OpenCLforNet.Runtime
         {
             foreach (var arg in Args)
             {
-                Marshal.FreeCoTaskMem(new IntPtr(arg));
+                Marshal.FreeCoTaskMem(arg.Value);
             }
             OpenCL.clReleaseKernel(Pointer).CheckError();
         }
