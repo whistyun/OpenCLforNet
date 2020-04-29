@@ -184,6 +184,30 @@ namespace OpenCLforNet.Memory
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 
+    public class SVMEnumerator<T> : IEnumerator<T> where T : struct
+    {
+        public int Index { get; private set; }
+        public int Length { get; private set; }
+        public TypedSVMBuffer<T> Buffer { get; private set; }
+
+        public SVMEnumerator(TypedSVMBuffer<T> buffer)
+        {
+            Index = -1;
+            Buffer = buffer;
+            Length = buffer.LengthX * buffer.LengthY * buffer.LengthZ;
+        }
+
+        public T Current { get => Buffer.GetAt(Index); }
+
+        object IEnumerator.Current => this.Current;
+
+        public bool MoveNext() => ++Index < Length;
+
+        public void Reset() => Index = -1;
+
+        public void Dispose() { }
+    }
+
     public unsafe class ByteSVMBuffer : TypedSVMBuffer<byte>
     {
         public ByteSVMBuffer(Context context, int lengthX, int lengthY, int lengthZ, uint alignment)
@@ -260,29 +284,5 @@ namespace OpenCLforNet.Memory
 
         public override double GetAt(int index) => ((double*)Pointer)[index];
         public override void SetAt(int index, double value) => ((double*)Pointer)[index] = value;
-    }
-
-    public class SVMEnumerator<T> : IEnumerator<T> where T : struct
-    {
-        public int Index { get; private set; }
-        public int Length { get; private set; }
-        public TypedSVMBuffer<T> Buffer { get; private set; }
-
-        public SVMEnumerator(TypedSVMBuffer<T> buffer)
-        {
-            Index = -1;
-            Buffer = buffer;
-            Length = buffer.LengthX * buffer.LengthY * buffer.LengthZ;
-        }
-
-        public T Current { get => Buffer[Index]; }
-
-        object IEnumerator.Current => this.Current;
-
-        public bool MoveNext() => ++Index < Length;
-
-        public void Reset() => Index = -1;
-
-        public void Dispose() { }
     }
 }

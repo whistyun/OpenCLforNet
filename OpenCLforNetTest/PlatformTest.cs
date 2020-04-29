@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenCLforNet.Framework;
+
 
 namespace OpenCLforNetTest
 {
@@ -11,7 +11,6 @@ namespace OpenCLforNetTest
         public void GetInfos()
         {
 
-            var infos = Platform.PlatformInfos;
 
         }
         

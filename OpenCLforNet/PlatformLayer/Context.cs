@@ -75,126 +75,66 @@ namespace OpenCLforNet.PlatformLayer
             return program.CreateKernel(kernelName);
         }
 
-        public SimpleMemory CreateSimpleMemory(long size)
-        {
-            return new SimpleMemory(this, size);
-        }
+        public SimpleMemory CreateSimpleMemory(long size) => new SimpleMemory(this, size);
+        public ByteSimpleMemory CreateByteSimpleMemory(long length) => new ByteSimpleMemory(this, length);
+        public CharSimpleMemory CreateCharSimpleMemory(long length) => new CharSimpleMemory(this, length);
+        public ShortSimpleMemory CreateShortSimpleMemory(long length) => new ShortSimpleMemory(this, length);
+        public IntSimpleMemory CreateIntSimpleMemory(long length) => new IntSimpleMemory(this, length);
+        public LongSimpleMemory CreateLongSimpleMemory(long length) => new LongSimpleMemory(this, length);
+        public FloatSimpleMemory CreateFloatSimpleMemory(long length) => new FloatSimpleMemory(this, length);
+        public DoubleSimpleMemory CreateDoubleSimpleMemory(long length) => new DoubleSimpleMemory(this, length);
 
-        public SimpleMemory CreateSimpleMemory(byte[] data, long size)
-        {
-            return new SimpleMemory(this, data, size);
-        }
 
-        public SimpleMemory CreateSimpleMemory(char[] data, long size)
-        {
-            return new SimpleMemory(this, data, size);
-        }
 
-        public SimpleMemory CreateSimpleMemory(short[] data, long size)
-        {
-            return new SimpleMemory(this, data, size);
-        }
+        public ByteSimpleMemory CreateSimpleMemory(byte[] data) => new ByteSimpleMemory(this, data);
+        public CharSimpleMemory CreateSimpleMemory(char[] data) => new CharSimpleMemory(this, data);
+        public ShortSimpleMemory CreateSimpleMemory(short[] data) => new ShortSimpleMemory(this, data);
+        public IntSimpleMemory CreateSimpleMemory(int[] data) => new IntSimpleMemory(this, data);
+        public LongSimpleMemory CreateSimpleMemory(long[] data) => new LongSimpleMemory(this, data);
+        public FloatSimpleMemory CreateSimpleMemory(float[] data) => new FloatSimpleMemory(this, data);
+        public DoubleSimpleMemory CreateSimpleMemory(double[] data) => new DoubleSimpleMemory(this, data);
 
-        public SimpleMemory CreateSimpleMemory(int[] data, long size)
-        {
-            return new SimpleMemory(this, data, size);
-        }
+        public MappingMemory CreateMappingMemory(long size) => new MappingMemory(this, size);
+        public ByteMappingMemory CreateByteMappingMemory(long length) => new ByteMappingMemory(this, length);
+        public CharMappingMemory CreateCharMappingMemory(long length) => new CharMappingMemory(this, length);
+        public ShortMappingMemory CreateShortMappingMemory(long length) => new ShortMappingMemory(this, length);
+        public IntMappingMemory CreateIntMappingMemory(long length) => new IntMappingMemory(this, length);
+        public LongMappingMemory CreateLongMappingMemory(long length) => new LongMappingMemory(this, length);
+        public FloatMappingMemory CreateFloatMappingMemory(long length) => new FloatMappingMemory(this, length);
+        public DoubleMappingMemory CreateDoubleMappingMemory(long length) => new DoubleMappingMemory(this, length);
 
-        public SimpleMemory CreateSimpleMemory(long[] data, long size)
-        {
-            return new SimpleMemory(this, data, size);
-        }
-
-        public SimpleMemory CreateSimpleMemory(float[] data, long size)
-        {
-            return new SimpleMemory(this, data, size);
-        }
-
-        public SimpleMemory CreateSimpleMemory(double[] data, long size)
-        {
-            return new SimpleMemory(this, data, size);
-        }
-
-        public MappingMemory CreateMappingMemory(long size)
-        {
-            return new MappingMemory(this, size);
-        }
-
-        public MappingMemory CreateMappingMemory(byte[] data, long size)
-        {
-            return new MappingMemory(this, data, size);
-        }
-
-        public MappingMemory CreateMappingMemory(char[] data, long size)
-        {
-            return new MappingMemory(this, data, size);
-        }
-
-        public MappingMemory CreateMappingMemory(short[] data, long size)
-        {
-            return new MappingMemory(this, data, size);
-        }
-
-        public MappingMemory CreateMappingMemory(int[] data, long size)
-        {
-            return new MappingMemory(this, data, size);
-        }
-
-        public MappingMemory CreateMappingMemory(long[] data, long size)
-        {
-            return new MappingMemory(this, data, size);
-        }
-
-        public MappingMemory CreateMappingMemory(float[] data, long size)
-        {
-            return new MappingMemory(this, data, size);
-        }
-
-        public MappingMemory CreateMappingMemory(double[] data, long size)
-        {
-            return new MappingMemory(this, data, size);
-        }
+        public ByteMappingMemory CreateMappingMemory(byte[] data) => new ByteMappingMemory(this, data);
+        public CharMappingMemory CreateMappingMemory(char[] data) => new CharMappingMemory(this, data);
+        public ShortMappingMemory CreateMappingMemory(short[] data) => new ShortMappingMemory(this, data);
+        public IntMappingMemory CreateMappingMemory(int[] data) => new IntMappingMemory(this, data);
+        public LongMappingMemory CreateMappingMemory(long[] data) => new LongMappingMemory(this, data);
+        public FloatMappingMemory CreateMappingMemory(float[] data) => new FloatMappingMemory(this, data);
+        public DoubleMappingMemory CreateMappingMemory(double[] data) => new DoubleMappingMemory(this, data);
 
         public SVMBuffer CreateSVMBuffer(long size, uint alignment)
-        {
-            return new SVMBuffer(this, size, alignment);
-
-        }
+            => new SVMBuffer(this, size, alignment);
 
         public ByteSVMBuffer CreateByteSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
-        {
-            return new ByteSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
-        }
+            => new ByteSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
 
         public CharSVMBuffer CreateCharSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
-        {
-            return new CharSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
-        }
+            => new CharSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
 
         public ShortSVMBuffer CreateShortSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
-        {
-            return new ShortSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
-        }
+            => new ShortSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
 
         public IntSVMBuffer CreateIntSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
-        {
-            return new IntSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
-        }
+            => new IntSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
 
         public LongSVMBuffer CreateLongSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
-        {
-            return new LongSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
-        }
+            => new LongSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
 
         public FloatSVMBuffer CreateFloatSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
-        {
-            return new FloatSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
-        }
+            => new FloatSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
 
         public DoubleSVMBuffer CreateDoubleSVMBuffer(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0)
-        {
-            return new DoubleSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
-        }
+            => new DoubleSVMBuffer(this, lengthX, lengthY, lengthZ, alignment);
+
 
         protected void DisposeUnManaged()
         {
