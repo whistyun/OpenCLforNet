@@ -41,9 +41,9 @@ namespace OpenCLforNet.Memory
         }
 
         public Event ReadUnsafe(CommandQueue commandQueue, bool blocking, IntPtr data, params Event[] eventWaitList)
-            => ReadUnsafe(commandQueue, blocking, data, 0, Size, eventWaitList);
+            => ReadUnsafe(commandQueue, blocking, 0, Size, data, eventWaitList);
 
-        public Event ReadUnsafe(CommandQueue commandQueue, bool blocking, IntPtr data, long offset, long size, params Event[] eventWaitList)
+        public Event ReadUnsafe(CommandQueue commandQueue, bool blocking, long offset, long size, IntPtr data, params Event[] eventWaitList)
         {
             return ReadUnsafe(commandQueue, blocking, offset, size, (void*)data, eventWaitList);
         }
