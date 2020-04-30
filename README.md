@@ -1,4 +1,4 @@
-﻿# OpenCLforNet
+# OpenCLforNet
 
 This is a OpenCL wrapper library for .NET Standard.
 
@@ -46,13 +46,18 @@ var kernel = program.CreateKernel(kernelName);
 var size = 100;
 var initialData = new byte[] { 0, 1, 2, ... };
 
+// simple memory
 var memObject = context.CreateSimpleMemory(size);
-var initializedMemObject = context.CreateSimpleMemory(initialData, size);
+var typedMemObj = context.CreateByteSimpleMemory(size);
+var initializedMemObject = context.CreateSimpleMemory(initialData);
 
+// mapping memory
 var mappableMemObject = context.CreateMappingMemory(size);
-var initializedMappableMemObject = context.CreateMappingMemory(initialData, size);
+var typedMappingMemObj = context.CreateByteMappingMemory(size);
+var initializedMappableMemObject = context.CreateMappingMemory(initialData);
 
-var alignment = 0;
+/// svm
+uint alignment = 0;
 var svmPointer = context.CreateSVMBuffer(size, alignment);
 
 ```
