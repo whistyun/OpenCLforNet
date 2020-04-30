@@ -71,7 +71,7 @@ namespace OpenCLforNet.Memory
                     commandQueue,
                     blocking,
                     bufferOffset, length,
-                    data, 0,
+                    data, dataOffset,
                     eventWaitList);
         }
 
@@ -119,7 +119,7 @@ namespace OpenCLforNet.Memory
                     commandQueue,
                     blocking,
                     bufferOffset, length,
-                    data, 0,
+                    data, dataOffset,
                     eventWaitList);
         }
     }
