@@ -10,7 +10,7 @@ using OpenCLforNet.Runtime;
 
 namespace OpenCLforNetTest
 {
-    unsafe class Program
+    class Program
     {
         static void Main(string[] args)
         {
@@ -25,13 +25,14 @@ namespace OpenCLforNetTest
                 kernel.SetWorkSize(4);
 
                 Console.WriteLine("\nCL_MEM_READ_WRITE");
-                using (var simpleMemory = context.CreateSimpleMemory(sizeof(float) * 4))
+                using (var simpleMemory = context.CreateFloatSimpleMemory(4))
                 {
                     var data = new float[] { 3F, 4.5F, 0F, -4.4F };
                     kernel.SetArgs(simpleMemory, 1F);
-                    var event11 = simpleMemory.Write(commandQueue, true, data, 0, simpleMemory.Size);
+
+                    var event11 = simpleMemory.Write(commandQueue, true, data);
                     var event12 = kernel.NDRange(commandQueue, event11);
-                    var event13 = simpleMemory.Read(commandQueue, true, data, 0, simpleMemory.Size, event12);
+                    var event13 = simpleMemory.Read(commandQueue, true, data, event12);
 
                     Console.WriteLine($"write time     : {event11.ExecutionTime} ns");
                     Console.WriteLine($"exec time      : {event12.ExecutionTime} ns");
@@ -41,15 +42,13 @@ namespace OpenCLforNetTest
 
 
                 Console.WriteLine("\nCL_MEM_COPY_HOST_PTR");
-                using (var simpleMemory = context.CreateSimpleMemory(
-                        new float[] { 3F, 4.5F, 0F, -4.4F },
-                        sizeof(float) * 4))
+                using (var simpleMemory = context.CreateSimpleMemory(new float[] { 3F, 4.5F, 0F, -4.4F }))
                 {
                     kernel.SetArgs(simpleMemory, 2F);
                     var event21 = kernel.NDRange(commandQueue);
 
                     var result = new float[4];
-                    var event22 = simpleMemory.Read(commandQueue, true, result, 0, simpleMemory.Size, event21);
+                    var event22 = simpleMemory.Read(commandQueue, true, result, event21);
 
                     Console.WriteLine($"exec time      : {event21.ExecutionTime} ns");
                     Console.WriteLine($"read time      : {event22.ExecutionTime} ns");
@@ -57,41 +56,36 @@ namespace OpenCLforNetTest
                 }
 
                 Console.WriteLine("\nCL_MEM_ALLOC_HOST_PTR");
-                using (var mappingMemory = context.CreateMappingMemory(sizeof(float) * 4))
+                using (var mappingMemory = context.CreateFloatMappingMemory(4))
                 {
                     var data = new float[4];
                     kernel.SetArgs(mappingMemory, 3F);
 
-                    var event31 = mappingMemory.Mapping(commandQueue, true, 0, mappingMemory.Size, out var p).Wait();
+                    using (var memMap = mappingMemory.Mapping(commandQueue, true, 0, mappingMemory.Length))
+                    {
+                        memMap[0] = 3F;
+                        memMap[1] = 4.5F;
+                        memMap[2] = 0F;
+                        memMap[3] = -4.4F;
+                    }
 
-                    var pointer = (float*)p;
-                    pointer[0] = 3F;
-                    pointer[1] = 4.5F;
-                    pointer[2] = 0F;
-                    pointer[3] = -4.4F;
+                    var event33 = kernel.NDRange(commandQueue);
+                    var event34 = mappingMemory.Read(commandQueue, true, data, event33);
 
-                    var event32 = mappingMemory.UnMapping(commandQueue, pointer);
-                    var event33 = kernel.NDRange(commandQueue, event32);
-                    var event34 = mappingMemory.Read(commandQueue, true, data, 0, mappingMemory.Size, event33);
-
-                    Console.WriteLine($"mapping time   : {event31.ExecutionTime} ns");
-                    Console.WriteLine($"unmapping time : {event32.ExecutionTime} ns");
                     Console.WriteLine($"exec time      : {event33.ExecutionTime} ns");
                     Console.WriteLine($"read time      : {event34.ExecutionTime} ns");
                     Console.WriteLine($"result         : [{String.Join("  ", data)}]");
                 }
 
                 Console.WriteLine("\nCL_MEM_USE_HOST_PTR");
-                using (var mappingMemory = context.CreateMappingMemory(
-                        new float[] { 3F, 4.5F, 0F, -4.4F },
-                        sizeof(float) * 4))
+                using (var mappingMemory = context.CreateMappingMemory(new float[] { 3F, 4.5F, 0F, -4.4F }))
                 {
                     kernel.SetArgs(mappingMemory, 4F);
 
                     var event41 = kernel.NDRange(commandQueue);
 
                     var result = new float[4];
-                    var event42 = mappingMemory.Read(commandQueue, true, result, 0, mappingMemory.Size, event41);
+                    var event42 = mappingMemory.Read(commandQueue, true, result, event41);
 
                     Console.WriteLine($"exec time      : {event41.ExecutionTime} ns");
                     Console.WriteLine($"read time      : {event42.ExecutionTime} ns");

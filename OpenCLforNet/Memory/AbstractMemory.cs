@@ -15,95 +15,18 @@ namespace OpenCLforNet.Memory
         public Context Context { get; protected set; }
         public void* Pointer { get; protected set; }
 
-        public Event Write(CommandQueue commandQueue, bool blocking, byte[] data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
+        public Event WriteUnsafe(CommandQueue commandQueue, bool blocking, IntPtr data, params Event[] eventWaitList)
+            => WriteUnsafe(commandQueue, blocking, 0, Size, data, eventWaitList);
 
-        public Event Write(CommandQueue commandQueue, bool blocking, byte[] data, long offset, long size, params Event[] eventWaitList)
+        public Event WriteUnsafe(CommandQueue commandQueue, bool blocking, long offset, long size, IntPtr data, params Event[] eventWaitList)
         {
-            fixed (void* dataPointer = data)
-            {
-                return Write(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
+            return WriteUnsafe(commandQueue, blocking, offset, size, (void*)data, eventWaitList);
         }
 
-        public Event Write(CommandQueue commandQueue, bool blocking, char[] data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
+        public Event WriteUnsafe(CommandQueue commandQueue, bool blocking, void* data, params Event[] eventWaitList)
+            => WriteUnsafe(commandQueue, blocking, 0, Size, data, eventWaitList);
 
-        public Event Write(CommandQueue commandQueue, bool blocking, char[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Write(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Write(CommandQueue commandQueue, bool blocking, short[] data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Write(CommandQueue commandQueue, bool blocking, short[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Write(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Write(CommandQueue commandQueue, bool blocking, int[] data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Write(CommandQueue commandQueue, bool blocking, int[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Write(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Write(CommandQueue commandQueue, bool blocking, long[] data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Write(CommandQueue commandQueue, bool blocking, long[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Write(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Write(CommandQueue commandQueue, bool blocking, float[] data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Write(CommandQueue commandQueue, bool blocking, float[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Write(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Write(CommandQueue commandQueue, bool blocking, double[] data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Write(CommandQueue commandQueue, bool blocking, double[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Write(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Write(CommandQueue commandQueue, bool blocking, IntPtr data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Write(CommandQueue commandQueue, bool blocking, IntPtr data, long offset, long size, params Event[] eventWaitList)
-        {
-            return Write(commandQueue, blocking, (void*)data, offset, size, eventWaitList);
-        }
-
-        public Event Write(CommandQueue commandQueue, bool blocking, void* data, params Event[] eventWaitList)
-            => Write(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Write(CommandQueue commandQueue, bool blocking, void* data, long offset, long size, params Event[] eventWaitList)
+        public Event WriteUnsafe(CommandQueue commandQueue, bool blocking, long offset, long size, void* data, params Event[] eventWaitList)
         {
             void* event_ = null;
 
@@ -117,95 +40,18 @@ namespace OpenCLforNet.Memory
             return new Event(event_);
         }
 
-        public Event Read(CommandQueue commandQueue, bool blocking, byte[] data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
+        public Event ReadUnsafe(CommandQueue commandQueue, bool blocking, IntPtr data, params Event[] eventWaitList)
+            => ReadUnsafe(commandQueue, blocking, data, 0, Size, eventWaitList);
 
-        public Event Read(CommandQueue commandQueue, bool blocking, byte[] data, long offset, long size, params Event[] eventWaitList)
+        public Event ReadUnsafe(CommandQueue commandQueue, bool blocking, IntPtr data, long offset, long size, params Event[] eventWaitList)
         {
-            fixed (void* dataPointer = data)
-            {
-                return Read(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
+            return ReadUnsafe(commandQueue, blocking, offset, size, (void*)data, eventWaitList);
         }
 
-        public Event Read(CommandQueue commandQueue, bool blocking, char[] data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
+        public Event ReadUnsafe(CommandQueue commandQueue, bool blocking, void* data, params Event[] eventWaitList)
+            => ReadUnsafe(commandQueue, blocking, 0, Size, data, eventWaitList);
 
-        public Event Read(CommandQueue commandQueue, bool blocking, char[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Read(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Read(CommandQueue commandQueue, bool blocking, short[] data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Read(CommandQueue commandQueue, bool blocking, short[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Read(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Read(CommandQueue commandQueue, bool blocking, int[] data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Read(CommandQueue commandQueue, bool blocking, int[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Read(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Read(CommandQueue commandQueue, bool blocking, long[] data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Read(CommandQueue commandQueue, bool blocking, long[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Read(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Read(CommandQueue commandQueue, bool blocking, float[] data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Read(CommandQueue commandQueue, bool blocking, float[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Read(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Read(CommandQueue commandQueue, bool blocking, double[] data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Read(CommandQueue commandQueue, bool blocking, double[] data, long offset, long size, params Event[] eventWaitList)
-        {
-            fixed (void* dataPointer = data)
-            {
-                return Read(commandQueue, blocking, dataPointer, offset, size, eventWaitList);
-            }
-        }
-
-        public Event Read(CommandQueue commandQueue, bool blocking, IntPtr data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Read(CommandQueue commandQueue, bool blocking, IntPtr data, long offset, long size, params Event[] eventWaitList)
-        {
-            return Read(commandQueue, blocking, (void*)data, offset, size, eventWaitList);
-        }
-
-        public Event Read(CommandQueue commandQueue, bool blocking, void* data, params Event[] eventWaitList)
-            => Read(commandQueue, blocking, data, 0, Size, eventWaitList);
-
-        public Event Read(CommandQueue commandQueue, bool blocking, void* data, long offset, long size, params Event[] eventWaitList)
+        public Event ReadUnsafe(CommandQueue commandQueue, bool blocking, long offset, long size, void* data, params Event[] eventWaitList)
         {
             void* event_ = null;
 
