@@ -54,6 +54,57 @@ namespace OpenCLforNet.Memory
         }
     }
 
+    public unsafe class SByteSimpleMemory : TypedSimpleMemory<sbyte>
+    {
+        public SByteSimpleMemory(Context context, long length) : base(context, length, sizeof(sbyte)) { }
+
+        public SByteSimpleMemory(Context context, sbyte[] data) : base(data.Length, sizeof(sbyte))
+        {
+            fixed (void* dataPtr = data)
+            {
+                CreateSimpleMemory(context, dataPtr, sizeof(sbyte) * data.Length);
+            }
+        }
+
+        public override Event ReadDirect(
+                CommandQueue commandQueue,
+                bool blocking,
+                long bufferOffset, int length,
+                sbyte[] data, int dataOffset,
+                params Event[] eventWaitList)
+        {
+            fixed (sbyte* sbytePtr = data)
+            {
+                void* dataPointer = sbytePtr + dataOffset;
+                return ReadUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(sbyte), length * sizeof(sbyte),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
+
+        public override Event WriteDirect(
+                CommandQueue commandQueue,
+                bool blocking,
+                long bufferOffset, int length,
+                sbyte[] data, int dataOffset,
+                params Event[] eventWaitList)
+        {
+            fixed (sbyte* sbytePtr = data)
+            {
+                void* dataPointer = sbytePtr + dataOffset;
+                return WriteUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(sbyte), length * sizeof(sbyte),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
+    }
+
     public unsafe class CharSimpleMemory : TypedSimpleMemory<char>
     {
         public CharSimpleMemory(Context context, long length) : base(context, length, sizeof(char)) { }

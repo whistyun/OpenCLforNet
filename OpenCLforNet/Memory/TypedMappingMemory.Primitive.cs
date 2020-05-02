@@ -58,6 +58,61 @@ namespace OpenCLforNet.Memory
         protected internal override void SetAt(void* pointer, long index, byte value) => ((byte*)pointer)[index] = value;
     }
 
+    public unsafe class SByteMappingMemory : TypedMappingMemory<sbyte>
+    {
+        public SByteMappingMemory(Context context, long length) : base(context, length, sizeof(sbyte)) { }
+
+        public SByteMappingMemory(Context context, sbyte[] data) : base(data.Length, sizeof(sbyte))
+        {
+            fixed (void* dataPtr = data)
+            {
+                CreateMappingMemory(context, dataPtr, sizeof(sbyte) * data.Length);
+            }
+        }
+
+        public override Event ReadDirect(
+                CommandQueue commandQueue,
+                bool blocking,
+                long bufferOffset, int length,
+                sbyte[] data, int dataOffset,
+                params Event[] eventWaitList)
+        {
+            fixed (sbyte* sbytePtr = data)
+            {
+                void* dataPointer = sbytePtr + dataOffset;
+                return ReadUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(sbyte), length * sizeof(sbyte),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
+
+        public override Event WriteDirect(
+                CommandQueue commandQueue,
+                bool blocking,
+                long bufferOffset, int length,
+                sbyte[] data, int dataOffset,
+                params Event[] eventWaitList)
+        {
+            fixed (sbyte* sbytePtr = data)
+            {
+                void* dataPointer = sbytePtr + dataOffset;
+                return WriteUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(sbyte), length * sizeof(sbyte),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
+
+        protected internal override sbyte GetAt(void* pointer, long index) => ((sbyte*)pointer)[index];
+
+        protected internal override void SetAt(void* pointer, long index, sbyte value) => ((sbyte*)pointer)[index] = value;
+    }
+
     public unsafe class CharMappingMemory : TypedMappingMemory<char>
     {
         public CharMappingMemory(Context context, long length) : base(context, length, sizeof(char)) { }

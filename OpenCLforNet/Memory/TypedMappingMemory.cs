@@ -42,6 +42,8 @@ namespace OpenCLforNet.Memory
         protected internal abstract T GetAt(void* pointer, long idx);
         protected internal abstract void SetAt(void* pointer, long idx, T value);
 
+        public TypedMap<T> Mapping(CommandQueue commandQueue, bool blocking) => Mapping(commandQueue, blocking, 0, Length);
+
         public TypedMap<T> Mapping(CommandQueue commandQueue, bool blocking, long offset, long length)
         {
             return new TypedMap<T>(commandQueue, this, blocking, offset, length);

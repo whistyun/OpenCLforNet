@@ -138,6 +138,29 @@ namespace OpenCLforNet.Runtime
         private uint Dimention = 1;
         private readonly IntPtr* WorkSizes = (IntPtr*)Marshal.AllocCoTaskMem(3 * IntPtr.Size);
 
+        private uint localDimention = 1;
+        private bool localSizeSet;
+        private readonly IntPtr* LocalSizes = (IntPtr*)Marshal.AllocCoTaskMem(3 * IntPtr.Size);
+
+        public void SetLocalSize(params long[] localSizes)
+        {
+            if (localSizes is null || localSizes.Length == 0)
+            {
+                localSizeSet = false;
+            }
+            else
+            {
+                if (localSizes.Length <= 0 || 4 <= localSizes.Length)
+                    throw new ArgumentException("localSizes length is invalid.");
+
+                localDimention = (uint)localSizes.Length;
+                for (var i = 0; i < localDimention; i++)
+                    LocalSizes[i] = new IntPtr(localSizes[i]);
+
+                localSizeSet = true;
+            }
+        }
+
         public void SetWorkSize(params long[] workSizes)
         {
             if (workSizes.Length <= 0 || 4 <= workSizes.Length)
@@ -156,7 +179,28 @@ namespace OpenCLforNet.Runtime
             var list = eventWaitList.Select(e => new IntPtr(e.Pointer)).ToArray();
             fixed (void* listPointer = list)
             {
-                OpenCL.clEnqueueNDRangeKernel(commandQueue.Pointer, Pointer, Dimention, null, WorkSizes, null, num, listPointer, &event_).CheckError();
+                cl_status_code stcd;
+
+                if (localSizeSet)
+                {
+                    stcd = OpenCL.clEnqueueNDRangeKernel(
+                            commandQueue.Pointer,
+                            Pointer,
+                            Dimention, null, WorkSizes, LocalSizes,
+                            num, listPointer,
+                            &event_);
+                }
+                else
+                {
+                    stcd = OpenCL.clEnqueueNDRangeKernel(
+                            commandQueue.Pointer,
+                            Pointer,
+                            Dimention, null, WorkSizes, null,
+                            num, listPointer,
+                            &event_);
+                }
+
+                stcd.CheckError();
             }
 
             return new Event(event_);
@@ -181,6 +225,9 @@ namespace OpenCLforNet.Runtime
             {
                 Marshal.FreeCoTaskMem(arg.Value);
             }
+            Marshal.FreeCoTaskMem((IntPtr)WorkSizes);
+            Marshal.FreeCoTaskMem((IntPtr)LocalSizes);
+
             OpenCL.clReleaseKernel(Pointer).CheckError();
         }
 

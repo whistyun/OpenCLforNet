@@ -77,6 +77,7 @@ namespace OpenCLforNet.PlatformLayer
 
         public SimpleMemory CreateSimpleMemory(long size) => new SimpleMemory(this, size);
         public ByteSimpleMemory CreateByteSimpleMemory(long length) => new ByteSimpleMemory(this, length);
+        public SByteSimpleMemory CreateSByteSimpleMemory(long length) => new SByteSimpleMemory(this, length);
         public CharSimpleMemory CreateCharSimpleMemory(long length) => new CharSimpleMemory(this, length);
         public ShortSimpleMemory CreateShortSimpleMemory(long length) => new ShortSimpleMemory(this, length);
         public IntSimpleMemory CreateIntSimpleMemory(long length) => new IntSimpleMemory(this, length);
@@ -87,6 +88,7 @@ namespace OpenCLforNet.PlatformLayer
 
 
         public ByteSimpleMemory CreateSimpleMemory(byte[] data) => new ByteSimpleMemory(this, data);
+        public SByteSimpleMemory CreateSimpleMemory(sbyte[] data) => new SByteSimpleMemory(this, data);
         public CharSimpleMemory CreateSimpleMemory(char[] data) => new CharSimpleMemory(this, data);
         public ShortSimpleMemory CreateSimpleMemory(short[] data) => new ShortSimpleMemory(this, data);
         public IntSimpleMemory CreateSimpleMemory(int[] data) => new IntSimpleMemory(this, data);
@@ -96,6 +98,7 @@ namespace OpenCLforNet.PlatformLayer
 
         public MappingMemory CreateMappingMemory(long size) => new MappingMemory(this, size);
         public ByteMappingMemory CreateByteMappingMemory(long length) => new ByteMappingMemory(this, length);
+        public SByteMappingMemory CreateSByteMappingMemory(long length) => new SByteMappingMemory(this, length);
         public CharMappingMemory CreateCharMappingMemory(long length) => new CharMappingMemory(this, length);
         public ShortMappingMemory CreateShortMappingMemory(long length) => new ShortMappingMemory(this, length);
         public IntMappingMemory CreateIntMappingMemory(long length) => new IntMappingMemory(this, length);
@@ -104,6 +107,7 @@ namespace OpenCLforNet.PlatformLayer
         public DoubleMappingMemory CreateDoubleMappingMemory(long length) => new DoubleMappingMemory(this, length);
 
         public ByteMappingMemory CreateMappingMemory(byte[] data) => new ByteMappingMemory(this, data);
+        public SByteMappingMemory CreateMappingMemory(sbyte[] data) => new SByteMappingMemory(this, data);
         public CharMappingMemory CreateMappingMemory(char[] data) => new CharMappingMemory(this, data);
         public ShortMappingMemory CreateMappingMemory(short[] data) => new ShortMappingMemory(this, data);
         public IntMappingMemory CreateMappingMemory(int[] data) => new IntMappingMemory(this, data);
