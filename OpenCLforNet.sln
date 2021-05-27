@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCLforNet", "OpenCLforNe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCLforNetTest", "OpenCLforNetTest\OpenCLforNetTest.csproj", "{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCLforNetSample.TemplateMatching", "OpenCLforNetSample.TemplateMatching\OpenCLforNetSample.TemplateMatching.csproj", "{F67B51B3-416A-4A92-A204-DA5EA4433ACC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenCLforNetSample.TemplateMatching", "OpenCLforNetSample.TemplateMatching\OpenCLforNetSample.TemplateMatching.csproj", "{F67B51B3-416A-4A92-A204-DA5EA4433ACC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,12 +45,14 @@ Global
 		{A114684B-8338-43B8-A042-A4FBB9250F92}.Release|x64.Build.0 = Release|Any CPU
 		{A114684B-8338-43B8-A042-A4FBB9250F92}.Release|x86.ActiveCfg = Release|Any CPU
 		{A114684B-8338-43B8-A042-A4FBB9250F92}.Release|x86.Build.0 = Release|Any CPU
-		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Debug|Any CPU.Build.0 = Debug|x64
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Debug|x64.ActiveCfg = Debug|x64
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Debug|x64.Build.0 = Debug|x64
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Debug|x86.ActiveCfg = Debug|x86
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Debug|x86.Build.0 = Debug|x86
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Release|Any CPU.ActiveCfg = Release|x86
+		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Release|Any CPU.Build.0 = Release|x86
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Release|x64.ActiveCfg = Release|x64
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Release|x64.Build.0 = Release|x64
 		{6B449762-1A87-4F1C-B62D-0BBBFF3C13CE}.Release|x86.ActiveCfg = Release|x86
