@@ -107,6 +107,9 @@ namespace OpenCLforNet.Function
         public static extern cl_status_code clGetEventProfilingInfo(void* event_, cl_profiling_info param_name, size_t param_value_size, void* param_value, size_t* param_value_size_ret);
 
         [DllImport("OpenCL.dll")]
+        public static extern cl_status_code clReleaseEvent(void* event_);
+
+        [DllImport("OpenCL.dll")]
         public static extern cl_status_code clFinish(void* command_queue);
 
     }
