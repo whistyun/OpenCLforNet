@@ -49,6 +49,11 @@ namespace OpenCLforNet.Runtime
             return kernel.NDRange(commandQueue: this, eventWaitList: eventWaitList);
         }
 
+        public void Flush()
+        {
+            OpenCL.clFlush(Pointer).CheckError();
+        }
+
         public void WaitFinish()
         {
             OpenCL.clFinish(Pointer).CheckError();

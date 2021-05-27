@@ -110,6 +110,9 @@ namespace OpenCLforNet.Function
         public static extern cl_status_code clReleaseEvent(void* event_);
 
         [DllImport("OpenCL.dll")]
+        public static extern cl_status_code clFlush(void* command_queue);
+
+        [DllImport("OpenCL.dll")]
         public static extern cl_status_code clFinish(void* command_queue);
 
     }
