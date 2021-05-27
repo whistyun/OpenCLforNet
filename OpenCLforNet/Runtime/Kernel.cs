@@ -52,86 +52,87 @@ namespace OpenCLforNet.Runtime
         }
         private readonly Dictionary<int, IntPtr> Args = new Dictionary<int, IntPtr>();
 
+        public void SetArg<T>(int index, T arg) where T:unmanaged
+        {
+            OpenCL.clSetKernelArg(Pointer, index, sizeof(T), &arg).CheckError();
+        }
+
+        public void SetArg(int index, SVMBuffer buf)
+        {
+            OpenCL.clSetKernelArgSVMPointer(Pointer, index, buf.Pointer).CheckError();
+        }
+
+        public void SetArg(int index, AbstractMemory mem)
+        {
+            // Remove old memobject
+            if (Args.ContainsKey(index))
+            {
+                Marshal.FreeCoTaskMem(Args[index]);
+                Args.Remove(index);
+            }
+
+            // Add new memobject
+            var argPointer = Marshal.AllocCoTaskMem(IntPtr.Size);
+            Marshal.WriteIntPtr(argPointer, new IntPtr(mem.Pointer));
+            OpenCL.clSetKernelArg(Pointer, index, IntPtr.Size, (void*)argPointer).CheckError();
+            Args.Add(index, argPointer);
+        }
+
         public void SetArg(int index, object arg)
         {
-            if (arg == null)
+            switch (arg)
             {
-                throw new NullReferenceException("Arg must not be null.");
-            }
-            else if (arg is AbstractMemory mem)
-            {
-                // Remove old memobject
-                if (Args.ContainsKey(index))
-                {
-                    Marshal.FreeCoTaskMem(Args[index]);
-                    Args.Remove(index);
-                }
-
-                // Add new memobject
-                var argPointer = Marshal.AllocCoTaskMem(IntPtr.Size);
-                Marshal.WriteIntPtr(argPointer, new IntPtr(mem.Pointer));
-                OpenCL.clSetKernelArg(Pointer, index, IntPtr.Size, (void*)argPointer).CheckError();
-                Args.Add(index, argPointer);
-            }
-            else if (arg is SVMBuffer buf)
-            {
-                OpenCL.clSetKernelArgSVMPointer(Pointer, index, buf.Pointer).CheckError();
-            }
-            else if (arg is byte barg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(byte), &barg).CheckError();
-            }
-            else if (arg is sbyte sbarg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(sbyte), &sbarg).CheckError();
-            }
-            else if (arg is char carg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(char), &carg).CheckError();
-            }
-            else if (arg is short sarg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(short), &sarg).CheckError();
-            }
-            else if (arg is ushort usarg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(ushort), &usarg).CheckError();
-            }
-            else if (arg is int iarg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(int), &iarg).CheckError();
-            }
-            else if (arg is uint uiarg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(uint), &uiarg).CheckError();
-            }
-            else if (arg is long larg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(long), &larg).CheckError();
-            }
-            else if (arg is ulong ularg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(ulong), &ularg).CheckError();
-            }
-            else if (arg is float farg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(float), &farg).CheckError();
-            }
-            else if (arg is double darg)
-            {
-                OpenCL.clSetKernelArg(Pointer, index, sizeof(double), &darg).CheckError();
-            }
-            else
-            {
-                throw new NotImplementedException();
+                case null:
+                    throw new NullReferenceException("Arg must not be null.");
+                case AbstractMemory mem:
+                    SetArg(index, mem);
+                    break;
+                case SVMBuffer buf:
+                    SetArg(index, buf);
+                    break;
+                case byte arg_:
+                    SetArg(index, arg_);
+                    break;
+                case sbyte arg_:
+                    SetArg(index, arg_);
+                    break;
+                case char arg_:
+                    SetArg(index, arg_);
+                    break;
+                case short arg_:
+                    SetArg(index, arg_);
+                    break;
+                case ushort arg_:
+                    SetArg(index, arg_);
+                    break;
+                case int arg_:
+                    SetArg(index, arg_);
+                    break;
+                case uint arg_:
+                    SetArg(index, arg_);
+                    break;
+                case long arg_:
+                    SetArg(index, arg_);
+                    break;
+                case ulong arg_:
+                    SetArg(index, arg_);
+                    break;
+                case float arg_:
+                    SetArg(index, arg_);
+                    break;
+                case double arg_:
+                    SetArg(index, arg_);
+                    break;
+                default:
+                    throw new ArgumentException($"Type of Arg was {arg.GetType()}");
             }
         }
 
         public void SetArgs(params object[] args)
         {
-            for (var i = 0; i < args.Length; i++)
+            for(int index = 0; index < args.Length; index++)
             {
-                SetArg(i, args[i]);
+                SetArg(index, args[index]);
             }
         }
 
