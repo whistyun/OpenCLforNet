@@ -132,7 +132,9 @@ namespace OpenCLforNet.Runtime
         {
             for(int index = 0; index < args.Length; index++)
             {
-                SetArg(index, args[index]);
+                var arg = args[index];
+                if(arg is null) { continue; }
+                SetArg(index, arg);
             }
         }
 
