@@ -3,37 +3,63 @@ using OpenCLforNet.Runtime;
 
 namespace OpenCLforNet.Memory
 {
-    public unsafe abstract class TypedSimpleMemory<T> : SimpleMemory, IArrayReadWrite<T> where T : struct
+    public unsafe class TypedSimpleMemory<T> : SimpleMemory, IArrayReadWrite<T> where T : unmanaged
     {
-        public int UnitSize { get; }
+        public int UnitSize => sizeof(T);
 
         public long Length { get; }
 
-        protected TypedSimpleMemory(long length, int unitSize)
+        public TypedSimpleMemory(Context context, long length) : base(context, length * sizeof(T))
         {
-            UnitSize = unitSize;
             Length = length;
         }
 
-        protected TypedSimpleMemory(Context context, long length, int unitSize)
-            : base(context, length * unitSize)
+        public TypedSimpleMemory(Context context, T[] data) : this(context, data, data.Length) { }
+
+        public TypedSimpleMemory(Context context, T[] data, long length) : this(context, length)
         {
-            UnitSize = unitSize;
-            Length = length;
+            fixed (void* dataPtr = data)
+            {
+                CreateSimpleMemory(context, dataPtr, sizeof(T) * data.Length);
+            }
         }
 
-        public abstract Event WriteDirect(
+        public Event ReadDirect(
                 CommandQueue commandQueue,
                 bool blocking,
                 long bufferOffset, int length,
                 T[] data, int dataOffset,
-                params Event[] eventWaitList);
+                params Event[] eventWaitList)
+        {
+            fixed (T* ptr = data)
+            {
+                void* dataPointer = ptr + dataOffset;
+                return ReadUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(T), length * sizeof(T),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
 
-        public abstract Event ReadDirect(
-                CommandQueue commandQueue,
-                bool blocking,
-                long bufferOffset, int length,
-                T[] data, int dataOffset,
-                params Event[] eventWaitList);
+        public Event WriteDirect(
+        CommandQueue commandQueue,
+        bool blocking,
+        long bufferOffset, int length,
+        T[] data, int dataOffset,
+        params Event[] eventWaitList)
+        {
+            fixed (T* ptr = data)
+            {
+                void* dataPointer = ptr + dataOffset;
+                return WriteUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(T), length * sizeof(T),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
     }
 }

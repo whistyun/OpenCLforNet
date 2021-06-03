@@ -36,7 +36,7 @@ namespace OpenCLforNetTest
         [Test]
         public void CreateTest()
         {
-            using (var mem = new StructMappingMemory<MyMappingStruct>(Context, 20))
+            using (var mem = new TypedMappingMemory<MyMappingStruct>(Context, 20))
             {
                 Assert.NotNull(mem.Context);
                 Assert.AreEqual(20 * Marshal.SizeOf(typeof(MyMappingStruct)), mem.Size);
@@ -47,7 +47,7 @@ namespace OpenCLforNetTest
         [Test]
         public void ReadWriteTest()
         {
-            using (var mem = new StructMappingMemory<MyMappingStruct>(Context, 100))
+            using (var mem = new TypedMappingMemory<MyMappingStruct>(Context, 100))
             {
                 MyMappingStruct[] dat = Enumerable.Range(0, 100)
                     .Select(n => new MyMappingStruct() { X = n, Y = n + 10, Point = n * 2.2f })
@@ -90,7 +90,7 @@ namespace OpenCLforNetTest
         [Test]
         public void ReadPartTest()
         {
-            using (var mem = new StructMappingMemory<MyMappingStruct>(Context, 100))
+            using (var mem = new TypedMappingMemory<MyMappingStruct>(Context, 100))
             {
                 MyMappingStruct[] dat = Enumerable.Range(0, 100)
                     .Select(n => new MyMappingStruct() { X = n, Y = n + 10, Point = n * 2.2f })
@@ -116,7 +116,7 @@ namespace OpenCLforNetTest
         [Test]
         public void WritePartTest()
         {
-            using (var mem = new StructMappingMemory<MyMappingStruct>(Context, 100))
+            using (var mem = new TypedMappingMemory<MyMappingStruct>(Context, 100))
             {
                 MyMappingStruct[] dat = Enumerable.Range(0, 100)
                     .Select(n => new MyMappingStruct() { X = n, Y = n + 10, Point = n * 2.2f })
@@ -145,7 +145,7 @@ namespace OpenCLforNetTest
                     .ToArray();
             MyMappingStruct[] ans = new MyMappingStruct[100];
 
-            using (var mem = new StructMappingMemory<MyMappingStruct>(Context, 100))
+            using (var mem = new TypedMappingMemory<MyMappingStruct>(Context, 100))
             {
                 using (var map = mem.Mapping(CommandQueue, true, 0, 100))
                 {
@@ -189,7 +189,7 @@ namespace OpenCLforNetTest
                     .ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var mem = new StructMappingMemory<MySimpleStruct>(Context, 100))
+                using (var mem = new TypedMappingMemory<MySimpleStruct>(Context, 100))
                 {
                     mem.Write(CommandQueue, true, 0, 50, input);
                     using (var memMap = mem.Mapping(CommandQueue, true, 50, WorkSize - 50))

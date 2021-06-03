@@ -5,9 +5,9 @@ using System.Collections;
 
 namespace OpenCLforNet.Memory
 {
-    public unsafe abstract class TypedSVMBuffer<T> : SVMBuffer, IEnumerable<T> where T : struct
+    public unsafe class TypedSVMBuffer<T> : SVMBuffer, IEnumerable<T> where T : unmanaged
     {
-        public int UnitSize { get; }
+        public int UnitSize => sizeof(T);
 
         public int Length { get => LengthX * LengthY * LengthZ; }
 
@@ -17,18 +17,16 @@ namespace OpenCLforNet.Memory
 
         public int LengthZ { get; }
 
-        protected TypedSVMBuffer(Context context, int lengthX, int lengthY, int lengthZ, uint alignment, int unitSize)
-            : base(context, lengthX * lengthY * lengthZ * unitSize, alignment)
+        public TypedSVMBuffer(Context context, int lengthX, int lengthY, int lengthZ, uint alignment)
+            : base(context, lengthX * lengthY * lengthZ * sizeof(T), alignment)
         {
-            UnitSize = unitSize;
             LengthX = lengthX;
             LengthY = lengthY;
             LengthZ = lengthZ;
         }
 
-        protected TypedSVMBuffer(SVMBuffer origin, int lengthX, int lengthY, int lengthZ, int unitSize) : base(origin)
+        public TypedSVMBuffer(SVMBuffer origin, int lengthX, int lengthY, int lengthZ) : base(origin)
         {
-            UnitSize = unitSize;
             LengthX = lengthX;
             LengthY = lengthY;
             LengthZ = lengthZ;
@@ -77,8 +75,8 @@ namespace OpenCLforNet.Memory
             }
         }
 
-        public abstract T GetAt(int idx);
-        public abstract void SetAt(int idx, T val);
+        public T GetAt(int index) => ((T*)Pointer)[index];
+        public void SetAt(int index, T value) => ((T*)Pointer)[index] = value;
 
         private void CheckIndex(int index)
         {
@@ -103,7 +101,7 @@ namespace OpenCLforNet.Memory
         IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
     }
 
-    public class SVMEnumerator<T> : IEnumerator<T> where T : struct
+    public class SVMEnumerator<T> : IEnumerator<T> where T : unmanaged
     {
         public int Index { get; private set; }
         public int Length { get; private set; }

@@ -6,41 +6,67 @@ using System.Collections;
 
 namespace OpenCLforNet.Memory
 {
-    public unsafe abstract class TypedMappingMemory<T> : MappingMemory, IArrayReadWrite<T> where T : struct
+    public unsafe class TypedMappingMemory<T> : MappingMemory, IArrayReadWrite<T> where T : unmanaged
     {
-        public int UnitSize { get; }
+        public int UnitSize => sizeof(T);
 
         public long Length { get; }
 
-        protected TypedMappingMemory(long length, int unitSize)
+        public TypedMappingMemory(Context context, long length) : base(context, length * sizeof(T))
         {
-            UnitSize = unitSize;
             Length = length;
         }
 
-        protected TypedMappingMemory(Context context, long length, int unitSize)
-            : base(context, length * unitSize)
+        public TypedMappingMemory(Context context, T[] data) : this(context, data, data.Length) { }
+
+        public TypedMappingMemory(Context context, T[] data, long length) : this(context, length)
         {
-            UnitSize = unitSize;
-            Length = length;
+            fixed (void* dataPtr = data)
+            {
+                CreateMappingMemory(context, dataPtr, sizeof(T) * length);
+            }
         }
 
-        public abstract Event WriteDirect(
+        public Event ReadDirect(
                 CommandQueue commandQueue,
                 bool blocking,
                 long bufferOffset, int length,
                 T[] data, int dataOffset,
-                params Event[] eventWaitList);
+                params Event[] eventWaitList)
+        {
+            fixed (T* ptr = data)
+            {
+                void* dataPointer = ptr + dataOffset;
+                return ReadUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(T), length * sizeof(T),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
 
-        public abstract Event ReadDirect(
-                CommandQueue commandQueue,
-                bool blocking,
-                long bufferOffset, int length,
-                T[] data, int dataOffset,
-                params Event[] eventWaitList);
+        public Event WriteDirect(
+        CommandQueue commandQueue,
+        bool blocking,
+        long bufferOffset, int length,
+        T[] data, int dataOffset,
+        params Event[] eventWaitList)
+        {
+            fixed (T* ptr = data)
+            {
+                void* dataPointer = ptr + dataOffset;
+                return WriteUnsafe(
+                        commandQueue,
+                        blocking,
+                        bufferOffset * sizeof(T), length * sizeof(T),
+                        dataPointer,
+                        eventWaitList);
+            }
+        }
 
-        protected internal abstract T GetAt(void* pointer, long idx);
-        protected internal abstract void SetAt(void* pointer, long idx, T value);
+        protected internal T GetAt(void* pointer, long index) => ((T*)pointer)[index];
+        protected internal void SetAt(void* pointer, long index, T value) => ((T*)pointer)[index] = value;
 
         public TypedMap<T> Mapping(CommandQueue commandQueue, bool blocking) => Mapping(commandQueue, blocking, 0, Length);
 
@@ -51,7 +77,7 @@ namespace OpenCLforNet.Memory
 
     }
 
-    public unsafe class TypedMap<T> : IDisposable, IEnumerable<T> where T : struct
+    public unsafe class TypedMap<T> : IDisposable, IEnumerable<T> where T : unmanaged
     {
         private bool isDisposed = false;
         private CommandQueue queue;
@@ -119,7 +145,7 @@ namespace OpenCLforNet.Memory
         }
     }
 
-    public class MappedMemoryEnumerator<T> : IEnumerator<T> where T : struct
+    public class MappedMemoryEnumerator<T> : IEnumerator<T> where T : unmanaged
     {
         public long Index { get; private set; }
         public long Length { get; private set; }

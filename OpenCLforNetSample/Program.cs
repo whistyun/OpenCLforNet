@@ -25,7 +25,7 @@ namespace OpenCLforNetTest
                 kernel.SetWorkSize(4);
 
                 Console.WriteLine("\nCL_MEM_READ_WRITE");
-                using (var simpleMemory = context.CreateFloatSimpleMemory(4))
+                using (var simpleMemory = context.CreateSimpleMemory<float>(4))
                 {
                     var data = new float[] { 3F, 4.5F, 0F, -4.4F };
                     kernel.SetArgs(simpleMemory, 1F);
@@ -56,7 +56,7 @@ namespace OpenCLforNetTest
                 }
 
                 Console.WriteLine("\nCL_MEM_ALLOC_HOST_PTR");
-                using (var mappingMemory = context.CreateFloatMappingMemory(4))
+                using (var mappingMemory = context.CreateMappingMemory<float>(4))
                 {
                     var data = new float[4];
                     kernel.SetArgs(mappingMemory, 3F);
@@ -93,7 +93,7 @@ namespace OpenCLforNetTest
                 }
 
                 Console.WriteLine("\nSVM");
-                using (var svmBuffer = context.CreateFloatSVMBuffer(4))
+                using (var svmBuffer = context.CreateSVMBuffer<float>(4))
                 {
                     kernel.SetArgs(svmBuffer, 5F);
 

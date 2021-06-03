@@ -72,7 +72,7 @@ namespace OpenCLforNetTest
                 var expected = input.Select(v => (byte)(v + Adding)).ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var simpleMemory = Context.CreateByteSimpleMemory(WorkSize))
+                using (var simpleMemory = Context.CreateSimpleMemory<byte>(WorkSize))
                 {
                     simpleMemory.Write(CommandQueue, true, 0, 50, input);
                     simpleMemory.Write(CommandQueue, true, 50, WorkSize - 50, input, 50);
@@ -99,7 +99,7 @@ namespace OpenCLforNetTest
                 var expected = input.Select(v => (char)(v + Adding)).ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var simpleMemory = Context.CreateCharSimpleMemory(WorkSize))
+                using (var simpleMemory = Context.CreateSimpleMemory<char>(WorkSize))
                 {
                     simpleMemory.Write(CommandQueue, true, 0, 50, input);
                     simpleMemory.Write(CommandQueue, true, 50, WorkSize - 50, input, 50);
@@ -126,7 +126,7 @@ namespace OpenCLforNetTest
                 var expected = input.Select(v => (short)(v + Adding)).ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var simpleMemory = Context.CreateShortSimpleMemory(WorkSize))
+                using (var simpleMemory = Context.CreateSimpleMemory<short>(WorkSize))
                 {
                     simpleMemory.Write(CommandQueue, true, 0, 50, input);
                     simpleMemory.Write(CommandQueue, true, 50, WorkSize - 50, input, 50);
@@ -154,7 +154,7 @@ namespace OpenCLforNetTest
                 var expected = input.Select(v => (int)(v + Adding)).ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var simpleMemory = Context.CreateIntSimpleMemory(WorkSize))
+                using (var simpleMemory = Context.CreateSimpleMemory<int>(WorkSize))
                 {
                     simpleMemory.Write(CommandQueue, true, 0, 50, input);
                     simpleMemory.Write(CommandQueue, true, 50, WorkSize - 50, input, 50);
@@ -182,7 +182,7 @@ namespace OpenCLforNetTest
                 var expected = input.Select(v => (long)(v + Adding)).ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var simpleMemory = Context.CreateLongSimpleMemory(WorkSize))
+                using (var simpleMemory = Context.CreateSimpleMemory<long>(WorkSize))
                 {
                     simpleMemory.Write(CommandQueue, true, 0, 50, input);
                     simpleMemory.Write(CommandQueue, true, 50, WorkSize - 50, input, 50);
@@ -210,7 +210,7 @@ namespace OpenCLforNetTest
                 var expected = input.Select(v => (float)(v + Adding)).ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var simpleMemory = Context.CreateFloatSimpleMemory(WorkSize))
+                using (var simpleMemory = Context.CreateSimpleMemory<float>(WorkSize))
                 {
                     simpleMemory.Write(CommandQueue, true, 0, 50, input);
                     simpleMemory.Write(CommandQueue, true, 50, WorkSize - 50, input, 50);
@@ -238,7 +238,7 @@ namespace OpenCLforNetTest
                 var expected = input.Select(v => (double)(v + Adding)).ToArray();
 
                 kernel.SetWorkSize(WorkSize);
-                using (var simpleMemory = Context.CreateDoubleSimpleMemory(WorkSize))
+                using (var simpleMemory = Context.CreateSimpleMemory<double>(WorkSize))
                 {
                     simpleMemory.Write(CommandQueue, true, 0, 50, input);
                     simpleMemory.Write(CommandQueue, true, 50, WorkSize - 50, input, 50);
