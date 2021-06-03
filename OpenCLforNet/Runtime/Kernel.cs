@@ -78,6 +78,11 @@ namespace OpenCLforNet.Runtime
             Args.Add(index, argPointer);
         }
 
+        public void SetArg(int index, LocalMemorySize size)
+        {
+            OpenCL.clSetKernelArg(Pointer, index, size.Size, null).CheckError();
+        }
+
         public void SetArg(int index, object arg)
         {
             switch (arg)
@@ -89,6 +94,9 @@ namespace OpenCLforNet.Runtime
                     break;
                 case SVMBuffer buf:
                     SetArg(index, buf);
+                    break;
+                case LocalMemorySize size:
+                    SetArg(index, size);
                     break;
                 case byte arg_:
                     SetArg(index, arg_);
