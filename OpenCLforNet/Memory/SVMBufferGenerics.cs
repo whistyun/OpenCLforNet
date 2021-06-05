@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace OpenCLforNet.Memory
 {
-    public unsafe class TypedSVMBuffer<T> : SVMBuffer, IEnumerable<T> where T : unmanaged
+    public unsafe class SVMBuffer<T> : SVMBuffer, IEnumerable<T> where T : unmanaged
     {
         public int UnitSize => sizeof(T);
 
@@ -17,7 +17,7 @@ namespace OpenCLforNet.Memory
 
         public int LengthZ { get; }
 
-        public TypedSVMBuffer(Context context, int lengthX, int lengthY, int lengthZ, uint alignment)
+        public SVMBuffer(Context context, int lengthX, int lengthY, int lengthZ, uint alignment)
             : base(context, lengthX * lengthY * lengthZ * sizeof(T), alignment)
         {
             LengthX = lengthX;
@@ -25,7 +25,7 @@ namespace OpenCLforNet.Memory
             LengthZ = lengthZ;
         }
 
-        public TypedSVMBuffer(SVMBuffer origin, int lengthX, int lengthY, int lengthZ) : base(origin)
+        public SVMBuffer(SVMBuffer origin, int lengthX, int lengthY, int lengthZ) : base(origin)
         {
             LengthX = lengthX;
             LengthY = lengthY;
@@ -105,9 +105,9 @@ namespace OpenCLforNet.Memory
     {
         public int Index { get; private set; }
         public int Length { get; private set; }
-        public TypedSVMBuffer<T> Buffer { get; private set; }
+        public SVMBuffer<T> Buffer { get; private set; }
 
-        public SVMEnumerator(TypedSVMBuffer<T> buffer)
+        public SVMEnumerator(SVMBuffer<T> buffer)
         {
             Index = -1;
             Buffer = buffer;

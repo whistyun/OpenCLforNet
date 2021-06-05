@@ -6,20 +6,20 @@ using System.Collections;
 
 namespace OpenCLforNet.Memory
 {
-    public unsafe class TypedMappingMemory<T> : MappingMemory, IArrayReadWrite<T> where T : unmanaged
+    public unsafe class MappingMemory<T> : MappingMemory, IArrayReadWrite<T> where T : unmanaged
     {
         public int UnitSize => sizeof(T);
 
         public long Length { get; }
 
-        public TypedMappingMemory(Context context, long length) : base(context, length * sizeof(T))
+        public MappingMemory(Context context, long length) : base(context, length * sizeof(T))
         {
             Length = length;
         }
 
-        public TypedMappingMemory(Context context, T[] data) : this(context, data, data.Length) { }
+        public MappingMemory(Context context, T[] data) : this(context, data, data.Length) { }
 
-        public TypedMappingMemory(Context context, T[] data, long length) : this(context, length)
+        public MappingMemory(Context context, T[] data, long length) : this(context, length)
         {
             fixed (void* dataPtr = data)
             {
@@ -81,13 +81,13 @@ namespace OpenCLforNet.Memory
     {
         private bool isDisposed = false;
         private CommandQueue queue;
-        private TypedMappingMemory<T> owner;
+        private MappingMemory<T> owner;
 
         private bool pointerConstructored;
         public readonly void* Pointer;
         public long Length { get; }
 
-        public TypedMap(CommandQueue queue, TypedMappingMemory<T> owner, bool blocking, long offset, long length)
+        public TypedMap(CommandQueue queue, MappingMemory<T> owner, bool blocking, long offset, long length)
         {
             this.queue = queue;
             this.owner = owner;

@@ -76,20 +76,20 @@ namespace OpenCLforNet.PlatformLayer
         }
 
         public SimpleMemory CreateSimpleMemory(long size) => new SimpleMemory(this, size);
-        public TypedSimpleMemory<T> CreateSimpleMemory<T>(long length) where T : unmanaged => new TypedSimpleMemory<T>(this, length);
-        public TypedSimpleMemory<T> CreateSimpleMemory<T>(T[] data) where T : unmanaged => new TypedSimpleMemory<T>(this, data);
-        public TypedSimpleMemory<T> CreateSimpleMemory<T>(T[] data, long length) where T : unmanaged => new TypedSimpleMemory<T>(this, data, length);
+        public SimpleMemory<T> CreateSimpleMemory<T>(long length) where T : unmanaged => new SimpleMemory<T>(this, length);
+        public SimpleMemory<T> CreateSimpleMemory<T>(T[] data) where T : unmanaged => new SimpleMemory<T>(this, data);
+        public SimpleMemory<T> CreateSimpleMemory<T>(T[] data, long length) where T : unmanaged => new SimpleMemory<T>(this, data, length);
 
         public MappingMemory CreateMappingMemory(long size) => new MappingMemory(this, size);
-        public TypedMappingMemory<T> CreateMappingMemory<T>(long length) where T : unmanaged => new TypedMappingMemory<T>(this, length);
-        public TypedMappingMemory<T> CreateMappingMemory<T>(T[] data) where T : unmanaged => new TypedMappingMemory<T>(this, data);
-        public TypedMappingMemory<T> CreateMappingMemory<T>(T[] data, long length) where T : unmanaged => new TypedMappingMemory<T>(this, data, length);
+        public MappingMemory<T> CreateMappingMemory<T>(long length) where T : unmanaged => new MappingMemory<T>(this, length);
+        public MappingMemory<T> CreateMappingMemory<T>(T[] data) where T : unmanaged => new MappingMemory<T>(this, data);
+        public MappingMemory<T> CreateMappingMemory<T>(T[] data, long length) where T : unmanaged => new MappingMemory<T>(this, data, length);
 
         public SVMBuffer CreateSVMBuffer(long size, uint alignment)
             => new SVMBuffer(this, size, alignment);
 
-        public TypedSVMBuffer<T> CreateSVMBuffer<T>(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0) where T : unmanaged
-            => new TypedSVMBuffer<T>(this, lengthX, lengthY, lengthZ, alignment);
+        public SVMBuffer<T> CreateSVMBuffer<T>(int lengthX, int lengthY = 1, int lengthZ = 1, uint alignment = 0) where T : unmanaged
+            => new SVMBuffer<T>(this, lengthX, lengthY, lengthZ, alignment);
 
         protected void DisposeUnManaged()
         {

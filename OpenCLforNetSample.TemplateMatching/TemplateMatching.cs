@@ -72,7 +72,7 @@ namespace OpenCLforNetSample.TemplateMatching
 
             using (var imgMem = Context.CreateSimpleMemory(sourceSource.Data))
             using (var tmpMem = Context.CreateSimpleMemory(templateSource.Data))
-            using (var pntAryMem = new TypedSimpleMemory<ScoredPoint>(Context, rangeI * rangeJ))
+            using (var pntAryMem = new SimpleMemory<ScoredPoint>(Context, rangeI * rangeJ))
             {
                 PgKernel.SetWorkSize(rangeI, rangeJ);
                 PgKernel.SetLocalSize(rangeLimitI, rangeLimitJ);
