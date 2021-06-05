@@ -8,17 +8,25 @@ namespace OpenCLforNet.Memory
 {
     public unsafe class MappingMemory<T> : MappingMemory, IArrayReadWrite<T> where T : unmanaged
     {
+        /// <summary>
+        /// sizeof(T)
+        /// </summary>
         public int UnitSize => sizeof(T);
-
+        /// <summary>
+        /// The number of <c>T</c> elements
+        /// </summary>
         public long Length { get; }
-
+        ///<inheritdoc cref="MappingMemory(Context, long)"/>
         public MappingMemory(Context context, long length) : base(context, length * sizeof(T))
         {
             Length = length;
         }
-
+        ///<inheritdoc cref="MappingMemory{T}(Context, T[], long)"/>
         public MappingMemory(Context context, T[] data) : this(context, data, data.Length) { }
-
+        /// <inheritdoc cref="MappingMemory(Context, void*, long)"/>
+        /// <param name="context">OpenCL context</param>
+        /// <param name="data">Data to copy to the buffer (managed array won't be mapped)</param>
+        /// <param name="length">size of <c>data</c> in the number of <c>T</c> elements</param>
         public MappingMemory(Context context, T[] data, long length) : this(context, length)
         {
             fixed (void* dataPtr = data)

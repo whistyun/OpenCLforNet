@@ -4,4 +4,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+    <DocumentationFile>C:\Users\pc03\Documents\Visual Studio 2019\Projects\OpenCLForNet\OpenCLforNet\OpenCLforNet.xml</DocumentationFile>
+  </PropertyGroup>
 </Project>

@@ -51,17 +51,31 @@ namespace OpenCLforNet.Runtime
             }
         }
         private readonly Dictionary<int, IntPtr> Args = new Dictionary<int, IntPtr>();
-
+        /// <summary>
+        /// clSetKernelArg(this, index, sizeof(T), &amp;arg)
+        /// </summary>
+        /// <typeparam name="T">Any unmanaged type (value/struct)</typeparam>
+        /// <param name="index">Index of this argument</param>
+        /// <param name="arg">Argument to set</param>
         public void SetArg<T>(int index, T arg) where T:unmanaged
         {
             OpenCL.clSetKernelArg(Pointer, index, sizeof(T), &arg).CheckError();
         }
-
+        /// <summary>
+        /// clSetKernelArgSVMPointer(this, index, buf)
+        /// </summary>
+        /// <typeparam name="T">Any unmanaged type (value/struct)</typeparam>
+        /// <param name="index">Index of this argument</param>
+        /// <param name="buf">SVM to set</param>
         public void SetArg(int index, SVMBuffer buf)
         {
             OpenCL.clSetKernelArgSVMPointer(Pointer, index, buf.Pointer).CheckError();
         }
-
+        /// <summary>
+        /// clSetKernelArg(this, index, mem)
+        /// </summary>
+        /// <param name="index">Index of this argument</param>
+        /// <param name="mem">Memory object to set</param>
         public void SetArg(int index, AbstractMemory mem)
         {
             // Remove old memobject
@@ -77,12 +91,15 @@ namespace OpenCLforNet.Runtime
             OpenCL.clSetKernelArg(Pointer, index, IntPtr.Size, (void*)argPointer).CheckError();
             Args.Add(index, argPointer);
         }
-
+        /// <summary>
+        /// clSetKernelArg(this, index, size.Size, null)
+        /// </summary>
+        /// <param name="index">Index of this argument</param>
+        /// <param name="size">LocalMemorySize object</param>
         public void SetArg(int index, LocalMemorySize size)
         {
             OpenCL.clSetKernelArg(Pointer, index, size.Size, null).CheckError();
         }
-
         public void SetArg(int index, object arg)
         {
             switch (arg)
@@ -135,7 +152,10 @@ namespace OpenCLforNet.Runtime
                     throw new ArgumentException($"Type of Arg was {arg.GetType()}");
             }
         }
-
+        /// <summary>
+        /// Set multiple arguments with SetArg()
+        /// </summary>
+        /// <param name="args">Argments. Set null to skip setting nth argument.</param>
         public void SetArgs(params object[] args)
         {
             for(int index = 0; index < args.Length; index++)
@@ -146,10 +166,10 @@ namespace OpenCLforNet.Runtime
             }
         }
 
-        private uint Dimention = 1;
+        private uint Dimension = 1;
         private readonly IntPtr* WorkSizes = (IntPtr*)Marshal.AllocCoTaskMem(3 * IntPtr.Size);
 
-        private uint localDimention = 1;
+        private uint localDimension = 1;
         private bool localSizeSet;
         private readonly IntPtr* LocalSizes = (IntPtr*)Marshal.AllocCoTaskMem(3 * IntPtr.Size);
 
@@ -164,8 +184,8 @@ namespace OpenCLforNet.Runtime
                 if (localSizes.Length <= 0 || 4 <= localSizes.Length)
                     throw new ArgumentException("localSizes length is invalid.");
 
-                localDimention = (uint)localSizes.Length;
-                for (var i = 0; i < localDimention; i++)
+                localDimension = (uint)localSizes.Length;
+                for (var i = 0; i < localDimension; i++)
                     LocalSizes[i] = new IntPtr(localSizes[i]);
 
                 localSizeSet = true;
@@ -177,11 +197,17 @@ namespace OpenCLforNet.Runtime
             if (workSizes.Length <= 0 || 4 <= workSizes.Length)
                 throw new ArgumentException("workSizes length is invalid.");
 
-            Dimention = (uint)workSizes.Length;
-            for (var i = 0; i < Dimention; i++)
+            Dimension = (uint)workSizes.Length;
+            for (var i = 0; i < Dimension; i++)
                 WorkSizes[i] = new IntPtr(workSizes[i]);
         }
 
+        /// <summary>
+        /// clEnqueueNDRangeKernel(commandQueue, this, Dimemsion, null, WorkSizes, LocalSizes, eventWaitList.Length, eventWaitList, &amp;event_)
+        /// </summary>
+        /// <param name="commandQueue">CommandQueue to enqueue this job</param>
+        /// <param name="eventWaitList">Events to wait before starting this job</param>
+        /// <returns></returns>
         public Event NDRange(CommandQueue commandQueue, params Event[] eventWaitList)
         {
             void* event_ = null;
@@ -197,7 +223,7 @@ namespace OpenCLforNet.Runtime
                     stcd = OpenCL.clEnqueueNDRangeKernel(
                             commandQueue.Pointer,
                             Pointer,
-                            Dimention, null, WorkSizes, LocalSizes,
+                            Dimension, null, WorkSizes, LocalSizes,
                             num, listPointer,
                             &event_);
                 }
@@ -206,7 +232,7 @@ namespace OpenCLforNet.Runtime
                     stcd = OpenCL.clEnqueueNDRangeKernel(
                             commandQueue.Pointer,
                             Pointer,
-                            Dimention, null, WorkSizes, null,
+                            Dimension, null, WorkSizes, null,
                             num, listPointer,
                             &event_);
                 }
@@ -216,13 +242,13 @@ namespace OpenCLforNet.Runtime
 
             return new Event(event_);
         }
-
+        ///<inheritdoc cref="NDRange(CommandQueue, Event[])"/>
         public Event NDRange(CommandQueue commandQueue, long[] workSizes)
         {
             SetWorkSize(workSizes);
             return NDRange(commandQueue);
         }
-
+        ///<inheritdoc cref="NDRange(CommandQueue, Event[])"/>
         public Event NDRange(CommandQueue commandQueue, long[] workSizes, params object[] args)
         {
             SetWorkSize(workSizes);

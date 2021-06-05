@@ -11,6 +11,9 @@ namespace OpenCLforNet.Memory
 {
     public abstract unsafe class AbstractMemory : AbstractBuffer
     {
+        /// <summary>
+        /// Size in bytes
+        /// </summary>
         public long Size { get; protected set; }
         public Context Context { get; protected set; }
         public void* Pointer { get; protected set; }
