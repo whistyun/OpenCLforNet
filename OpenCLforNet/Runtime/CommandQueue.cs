@@ -16,12 +16,14 @@ namespace OpenCLforNet.Runtime
         public Device Device { get; }
         public void* Pointer { get; }
 
-        public CommandQueue(Context context, Device device)
+        public CommandQueue(Context context, Device device) : this(context, device, cl_command_queue_properties.CL_QUEUE_PROFILING_ENABLE) { }
+
+        public CommandQueue(Context context, Device device, cl_command_queue_properties options)
         {
             var status = cl_status_code.CL_SUCCESS;
             Context = context;
             Device = device;
-            Pointer = OpenCL.clCreateCommandQueue(context.Pointer, device.Pointer, cl_command_queue_properties.CL_QUEUE_PROFILING_ENABLE, &status);
+            Pointer = OpenCL.clCreateCommandQueue(context.Pointer, device.Pointer, options, &status);
             status.CheckError();
         }
 
