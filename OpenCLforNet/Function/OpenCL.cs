@@ -20,7 +20,7 @@ namespace OpenCLforNet.Function
         public static extern cl_status_code clGetPlatformInfo(void* platform, cl_platform_info param_name, size_t param_value_size, void* param_value, void* param_value_size_ret);
 
         [DllImport("OpenCL")]
-        public static extern cl_status_code clGetDeviceIDs(void* platform, cl_device_type device_type, uint num_entries, void** devices, uint* num_devices);
+        public static extern cl_status_code clGetDeviceIDs(void* platform, cl_device_types device_type, uint num_entries, void** devices, uint* num_devices);
 
         [DllImport("OpenCL")]
         public static extern cl_status_code clGetDeviceInfo(void* device, cl_device_info param_name, size_t param_value_size, void* param_value, void* param_value_size_ret);

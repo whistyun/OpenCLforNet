@@ -12,7 +12,7 @@ namespace OpenCLforNet.Function
 
     // see https://github.com/KhronosGroup/OpenCL-Headers/blob/master/CL/cl.h
 
-    public enum cl_device_type : cl_bitfield
+    public enum cl_device_types : cl_bitfield
     {
         CL_DEVICE_TYPE_DEFAULT = (1 << 0),
         CL_DEVICE_TYPE_CPU = (1 << 1),

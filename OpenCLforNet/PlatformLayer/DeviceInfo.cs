@@ -21,11 +21,11 @@ namespace OpenCLforNet.PlatformLayer
 
             // get a device
             uint count = 0;
-            OpenCL.clGetDeviceIDs(platform, cl_device_type.CL_DEVICE_TYPE_ALL, 0, null, &count).CheckError();
+            OpenCL.clGetDeviceIDs(platform, cl_device_types.CL_DEVICE_TYPE_ALL, 0, null, &count).CheckError();
             var devices = (void**)Marshal.AllocCoTaskMem((int)(count * IntPtr.Size));
             try
             {
-                OpenCL.clGetDeviceIDs(platform, cl_device_type.CL_DEVICE_TYPE_ALL, count, devices, &count).CheckError();
+                OpenCL.clGetDeviceIDs(platform, cl_device_types.CL_DEVICE_TYPE_ALL, count, devices, &count).CheckError();
 
                 // get device infos
                 foreach (cl_device_info info in Enum.GetValues(typeof(cl_device_info)))
@@ -136,9 +136,9 @@ namespace OpenCLforNet.PlatformLayer
             }
         }
 
-        public cl_device_type GetValueAsClDeviceType(string key)
+        public cl_device_types GetValueAsClDeviceType(string key)
         {
-            return (cl_device_type)BitConverter.ToUInt64(infos[key], 0);
+            return (cl_device_types)BitConverter.ToUInt64(infos[key], 0);
         }
 
         public cl_device_fp_config GetValueAsClDeviceFpConfig(string key)

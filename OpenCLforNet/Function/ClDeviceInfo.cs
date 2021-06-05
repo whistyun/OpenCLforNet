@@ -55,7 +55,7 @@ namespace OpenCLforNet.Function
         public static readonly ClDeviceInfoFor<ulong> DeviceProfilingTimerResolution;
         public static readonly ClDeviceInfoFor<cl_command_queue_properties> DeviceQueueProperties;
         public static readonly ClDeviceInfoFor<cl_device_fp_config> DeviceSingleFpConfig;
-        public static readonly ClDeviceInfoFor<cl_device_type> DeviceType;
+        public static readonly ClDeviceInfoFor<cl_device_types> DeviceType;
         public static readonly ClDeviceInfoFor<string> DeviceVendor;
         public static readonly ClDeviceInfoFor<uint> DeviceVendorId;
         public static readonly ClDeviceInfoFor<string> DeviceVersion;
@@ -196,10 +196,10 @@ namespace OpenCLforNet.Function
             public override ulong[] Get(DeviceInfo device) => device.GetValueAsSizeTArray(Name);
             public override string GetAsString(DeviceInfo device) => "size " + String.Join(", ", Get(device));
         }
-        private class CLDeviceInfoClDeviceType : ClDeviceInfoFor<cl_device_type>
+        private class CLDeviceInfoClDeviceType : ClDeviceInfoFor<cl_device_types>
         {
             public CLDeviceInfoClDeviceType(cl_device_info info) : base(info) { }
-            public override cl_device_type Get(DeviceInfo device) => device.GetValueAsClDeviceType(Name);
+            public override cl_device_types Get(DeviceInfo device) => device.GetValueAsClDeviceType(Name);
             public override string GetAsString(DeviceInfo device) => Get(device).ToString();
         }
         private class CLDeviceInfoClDeviceFpConfig : ClDeviceInfoFor<cl_device_fp_config>
