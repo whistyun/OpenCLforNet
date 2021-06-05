@@ -30,9 +30,9 @@ namespace OpenCLforNetTest
                     var data = new float[] { 3F, 4.5F, 0F, -4.4F };
                     kernel.SetArgs(simpleMemory, 1F);
 
-                    var event11 = simpleMemory.Write(commandQueue, true, data);
-                    var event12 = kernel.NDRange(commandQueue, event11);
-                    var event13 = simpleMemory.Read(commandQueue, true, data, event12);
+                    using var event11 = simpleMemory.Write(commandQueue, true, data);
+                    using var event12 = kernel.NDRange(commandQueue, event11);
+                    using var event13 = simpleMemory.Read(commandQueue, true, data, event12);
 
                     Console.WriteLine($"write time     : {event11.ExecutionTime} ns");
                     Console.WriteLine($"exec time      : {event12.ExecutionTime} ns");
@@ -45,10 +45,10 @@ namespace OpenCLforNetTest
                 using (var simpleMemory = context.CreateSimpleMemory(new float[] { 3F, 4.5F, 0F, -4.4F }))
                 {
                     kernel.SetArgs(simpleMemory, 2F);
-                    var event21 = kernel.NDRange(commandQueue);
+                    using var event21 = kernel.NDRange(commandQueue);
 
                     var result = new float[4];
-                    var event22 = simpleMemory.Read(commandQueue, true, result, event21);
+                    using var event22 = simpleMemory.Read(commandQueue, true, result, event21);
 
                     Console.WriteLine($"exec time      : {event21.ExecutionTime} ns");
                     Console.WriteLine($"read time      : {event22.ExecutionTime} ns");
@@ -69,8 +69,8 @@ namespace OpenCLforNetTest
                         memMap[3] = -4.4F;
                     }
 
-                    var event33 = kernel.NDRange(commandQueue);
-                    var event34 = mappingMemory.Read(commandQueue, true, data, event33);
+                    using var event33 = kernel.NDRange(commandQueue);
+                    using var event34 = mappingMemory.Read(commandQueue, true, data, event33);
 
                     Console.WriteLine($"exec time      : {event33.ExecutionTime} ns");
                     Console.WriteLine($"read time      : {event34.ExecutionTime} ns");
@@ -82,10 +82,10 @@ namespace OpenCLforNetTest
                 {
                     kernel.SetArgs(mappingMemory, 4F);
 
-                    var event41 = kernel.NDRange(commandQueue);
+                    using var event41 = kernel.NDRange(commandQueue);
 
                     var result = new float[4];
-                    var event42 = mappingMemory.Read(commandQueue, true, result, event41);
+                    using var event42 = mappingMemory.Read(commandQueue, true, result, event41);
 
                     Console.WriteLine($"exec time      : {event41.ExecutionTime} ns");
                     Console.WriteLine($"read time      : {event42.ExecutionTime} ns");
@@ -101,7 +101,7 @@ namespace OpenCLforNetTest
                     svmBuffer[1] = 4.5F;
                     svmBuffer[2] = 0F;
                     svmBuffer[3] = -4.4F;
-                    var event51 = kernel.NDRange(commandQueue);
+                    using var event51 = kernel.NDRange(commandQueue);
 
                     Console.WriteLine($"exec time      : {event51.ExecutionTime} ns");
                     Console.Write("result         : [  ");

@@ -81,9 +81,9 @@ namespace OpenCLforNetSample.TemplateMatching
                     imgMem, sourceSource.Width,
                     tmpMem, templateSource.Width, templateSource.Height,
                     pntAryMem);
-                PgKernel.NDRange(CommandQueue).Wait();
+                PgKernel.NDRange(CommandQueue).Dispose();
 
-                pntAryMem.Read(CommandQueue, true, ans);
+                pntAryMem.Read(CommandQueue, true, ans).Dispose();
             }
 
             return ans.Where(pnt => pnt.Score >= Threashold)
