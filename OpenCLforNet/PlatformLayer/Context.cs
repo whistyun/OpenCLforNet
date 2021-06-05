@@ -51,23 +51,13 @@ namespace OpenCLforNet.PlatformLayer
             }
         }
 
-        public CommandQueue CreateCommandQueue(int idx = 0)
-            => CreateCommandQueue(Devices[idx]);
+        public CommandQueue CreateCommandQueue(int idx = 0) => CreateCommandQueue(Devices[idx]);
+        public CommandQueue CreateCommandQueue(int idx, cl_command_queue_properties options) => CreateCommandQueue(Devices[idx], options);
+        public CommandQueue CreateCommandQueue(Device device) => new CommandQueue(this, device);
+        public CommandQueue CreateCommandQueue(Device device, cl_command_queue_properties options) => new CommandQueue(this, device, options);
 
-        public CommandQueue CreateCommandQueue(Device device)
-        {
-            return new CommandQueue(this, device);
-        }
-
-        public CLProgram CreateProgram(string source)
-        {
-            return new CLProgram(source, this);
-        }
-
-        public CLProgram CreateProgram(string source, string option)
-        {
-            return new CLProgram(source, this, option);
-        }
+        public CLProgram CreateProgram(string source) => new CLProgram(source, this);
+        public CLProgram CreateProgram(string source, string option) => new CLProgram(source, this, option);
 
         public Kernel CreateKernel(string source, string kernelName)
         {
